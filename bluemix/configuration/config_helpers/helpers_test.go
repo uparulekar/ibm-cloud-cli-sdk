@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/common/file_helpers"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -98,22 +97,7 @@ func TestConfigDir_BluemixHomesAndIbmCloudHomeSet_NothingExists(t *testing.T) {
 	assert.Equal(filepath.Join("/my_ibmcloud_home", ".bluemix"), ConfigDir())
 }
 
-// If IBMCLOUD_CONFIG_HOME is set but does not exist, $IBMCLOUD_CONFIG_HOME should be created and used
-func TestConfigDir_IbmCloudConfigHomeSet_NothingExists(t *testing.T) {
-	assert := assert.New(t)
-
-	env, userHome := captureAndPrepareEnv(assert)
-	defer resetEnv(env)
-	defer os.RemoveAll(userHome)
-
-	// if IBMCLOUD_CONFIG_HOME is set but does not exist, IBMCLOUD_HOME is used
-	assert.False(file_helpers.FileExists(userHome))
-	os.Setenv("IBMCLOUD_CONFIG_HOME", userHome)
-	assert.Equal(userHome, ConfigDir())
-	assert.True(file_helpers.FileExists(userHome))
-}
-
-// If IBMCLOUD_CONFIG_HOME is set and it exists, $IBMCLOUD_CONFIG_HOME should be used
+// If IBMCLOUD_CONFIG_HOME is set, $IBMCLOUD_CONFIG_HOME should be used
 func TestConfigDir_IbmCloudConfigHomeSet_Exists(t *testing.T) {
 	assert := assert.New(t)
 
@@ -122,7 +106,6 @@ func TestConfigDir_IbmCloudConfigHomeSet_Exists(t *testing.T) {
 	defer os.RemoveAll(userHome)
 
 	// if IBMCLOUD_CONFIG_HOME is set and exists, IBMCLOUD_CONFIG_HOME is used
-	assert.NoError(os.MkdirAll(userHome, 0777))
 	os.Setenv("IBMCLOUD_CONFIG_HOME", userHome)
 	assert.Equal(userHome, ConfigDir())
 }
