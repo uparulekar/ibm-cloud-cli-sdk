@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix"
-	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix/configuration/config_helpers"
 	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix/configuration/core_config"
 	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/i18n"
 )
@@ -51,8 +50,7 @@ func InitPluginContext(pluginName string) PluginContext {
 		func(err error) {
 			panic("configuration error: " + err.Error())
 		})
-	pluginPath := config_helpers.PluginDir(pluginName)
-	return createPluginContext(pluginPath, coreConfig)
+	return createPluginContext(pluginName, coreConfig)
 }
 
 func isMetadataRequest(args []string) bool {

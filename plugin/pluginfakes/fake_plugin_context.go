@@ -299,14 +299,14 @@ type FakePluginContext struct {
 	pluginConfigReturnsOnCall map[int]struct {
 		result1 plugin.PluginConfig
 	}
-	PluginDirectoryStub        func() string
-	pluginDirectoryMutex       sync.RWMutex
-	pluginDirectoryArgsForCall []struct {
+	PluginDataDirectoryStub        func() string
+	pluginDataDirectoryMutex       sync.RWMutex
+	pluginDataDirectoryArgsForCall []struct {
 	}
-	pluginDirectoryReturns struct {
+	pluginDataDirectoryReturns struct {
 		result1 string
 	}
-	pluginDirectoryReturnsOnCall map[int]struct {
+	pluginDataDirectoryReturnsOnCall map[int]struct {
 		result1 string
 	}
 	RefreshIAMTokenStub        func() (string, error)
@@ -1863,54 +1863,54 @@ func (fake *FakePluginContext) PluginConfigReturnsOnCall(i int, result1 plugin.P
 	}{result1}
 }
 
-func (fake *FakePluginContext) PluginDirectory() string {
-	fake.pluginDirectoryMutex.Lock()
-	ret, specificReturn := fake.pluginDirectoryReturnsOnCall[len(fake.pluginDirectoryArgsForCall)]
-	fake.pluginDirectoryArgsForCall = append(fake.pluginDirectoryArgsForCall, struct {
+func (fake *FakePluginContext) PluginDataDirectory() string {
+	fake.pluginDataDirectoryMutex.Lock()
+	ret, specificReturn := fake.pluginDataDirectoryReturnsOnCall[len(fake.pluginDataDirectoryArgsForCall)]
+	fake.pluginDataDirectoryArgsForCall = append(fake.pluginDataDirectoryArgsForCall, struct {
 	}{})
-	fake.recordInvocation("PluginDirectory", []interface{}{})
-	fake.pluginDirectoryMutex.Unlock()
-	if fake.PluginDirectoryStub != nil {
-		return fake.PluginDirectoryStub()
+	fake.recordInvocation("PluginDataDirectory", []interface{}{})
+	fake.pluginDataDirectoryMutex.Unlock()
+	if fake.PluginDataDirectoryStub != nil {
+		return fake.PluginDataDirectoryStub()
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.pluginDirectoryReturns
+	fakeReturns := fake.pluginDataDirectoryReturns
 	return fakeReturns.result1
 }
 
-func (fake *FakePluginContext) PluginDirectoryCallCount() int {
-	fake.pluginDirectoryMutex.RLock()
-	defer fake.pluginDirectoryMutex.RUnlock()
-	return len(fake.pluginDirectoryArgsForCall)
+func (fake *FakePluginContext) PluginDataDirectoryCallCount() int {
+	fake.pluginDataDirectoryMutex.RLock()
+	defer fake.pluginDataDirectoryMutex.RUnlock()
+	return len(fake.pluginDataDirectoryArgsForCall)
 }
 
-func (fake *FakePluginContext) PluginDirectoryCalls(stub func() string) {
-	fake.pluginDirectoryMutex.Lock()
-	defer fake.pluginDirectoryMutex.Unlock()
-	fake.PluginDirectoryStub = stub
+func (fake *FakePluginContext) PluginDataDirectoryCalls(stub func() string) {
+	fake.pluginDataDirectoryMutex.Lock()
+	defer fake.pluginDataDirectoryMutex.Unlock()
+	fake.PluginDataDirectoryStub = stub
 }
 
-func (fake *FakePluginContext) PluginDirectoryReturns(result1 string) {
-	fake.pluginDirectoryMutex.Lock()
-	defer fake.pluginDirectoryMutex.Unlock()
-	fake.PluginDirectoryStub = nil
-	fake.pluginDirectoryReturns = struct {
+func (fake *FakePluginContext) PluginDataDirectoryReturns(result1 string) {
+	fake.pluginDataDirectoryMutex.Lock()
+	defer fake.pluginDataDirectoryMutex.Unlock()
+	fake.PluginDataDirectoryStub = nil
+	fake.pluginDataDirectoryReturns = struct {
 		result1 string
 	}{result1}
 }
 
-func (fake *FakePluginContext) PluginDirectoryReturnsOnCall(i int, result1 string) {
-	fake.pluginDirectoryMutex.Lock()
-	defer fake.pluginDirectoryMutex.Unlock()
-	fake.PluginDirectoryStub = nil
-	if fake.pluginDirectoryReturnsOnCall == nil {
-		fake.pluginDirectoryReturnsOnCall = make(map[int]struct {
+func (fake *FakePluginContext) PluginDataDirectoryReturnsOnCall(i int, result1 string) {
+	fake.pluginDataDirectoryMutex.Lock()
+	defer fake.pluginDataDirectoryMutex.Unlock()
+	fake.PluginDataDirectoryStub = nil
+	if fake.pluginDataDirectoryReturnsOnCall == nil {
+		fake.pluginDataDirectoryReturnsOnCall = make(map[int]struct {
 			result1 string
 		})
 	}
-	fake.pluginDirectoryReturnsOnCall[i] = struct {
+	fake.pluginDataDirectoryReturnsOnCall[i] = struct {
 		result1 string
 	}{result1}
 }
@@ -2187,8 +2187,8 @@ func (fake *FakePluginContext) Invocations() map[string][][]interface{} {
 	defer fake.localeMutex.RUnlock()
 	fake.pluginConfigMutex.RLock()
 	defer fake.pluginConfigMutex.RUnlock()
-	fake.pluginDirectoryMutex.RLock()
-	defer fake.pluginDirectoryMutex.RUnlock()
+	fake.pluginDataDirectoryMutex.RLock()
+	defer fake.pluginDataDirectoryMutex.RUnlock()
 	fake.refreshIAMTokenMutex.RLock()
 	defer fake.refreshIAMTokenMutex.RUnlock()
 	fake.traceMutex.RLock()

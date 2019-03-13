@@ -3,9 +3,10 @@ package plugin
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix/configuration/config_helpers"
 
 	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix"
 	"github.com/IBM-Cloud/ibm-cloud-cli-sdk/bluemix/authentication/iam"
@@ -16,9 +17,9 @@ import (
 
 type pluginContext struct {
 	core_config.ReadWriter
-	cfConfig     cfConfigWrapper
-	pluginConfig PluginConfig
-	pluginPath   string
+	cfConfig      cfConfigWrapper
+	pluginConfig  PluginConfig
+	pluginDataDir string
 }
 
 type cfConfigWrapper struct {
@@ -42,12 +43,12 @@ func (c cfConfigWrapper) RefreshUAAToken() (string, error) {
 	return ret, nil
 }
 
-func createPluginContext(pluginPath string, coreConfig core_config.ReadWriter) *pluginContext {
+func createPluginContext(pluginName string, coreConfig core_config.ReadWriter) *pluginContext {
 	return &pluginContext{
-		pluginPath:   pluginPath,
-		pluginConfig: loadPluginConfigFromPath(filepath.Join(pluginPath, "config.json")),
-		ReadWriter:   coreConfig,
-		cfConfig:     cfConfigWrapper{coreConfig.CFConfig()},
+		pluginDataDir: config_helpers.PluginDataDir(pluginName),
+		pluginConfig:  loadPluginConfigFromPath(config_helpers.PluginConfigFile(pluginName)),
+		ReadWriter:    coreConfig,
+		cfConfig:      cfConfigWrapper{coreConfig.CFConfig()},
 	}
 }
 
@@ -89,8 +90,8 @@ func (c *pluginContext) HasAPIEndpoint() bool {
 	return c.APIEndpoint() != ""
 }
 
-func (c *pluginContext) PluginDirectory() string {
-	return c.pluginPath
+func (c *pluginContext) PluginDataDirectory() string {
+	return c.pluginDataDir
 }
 
 func (c *pluginContext) PluginConfig() PluginConfig {

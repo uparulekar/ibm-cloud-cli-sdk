@@ -57,32 +57,39 @@ func TempDir() string {
 	return filepath.Join(ConfigDir(), "tmp")
 }
 
-func ConfigFilePath() string {
+func ConfigFile() string {
 	return filepath.Join(ConfigDir(), "config.json")
 }
 
-func PluginRepoDir() string {
+func PluginsInstallationDir() string {
+	if dir := bluemix.EnvPluginsDir.Get(); dir != "" {
+		return dir
+	}
 	return filepath.Join(ConfigDir(), "plugins")
 }
 
-func PluginRepoCacheDir() string {
-	return filepath.Join(PluginRepoDir(), ".cache")
+func PluginsInstallationCacheDir() string {
+	return filepath.Join(PluginsInstallationDir(), ".cache")
 }
 
-func PluginsConfigFilePath() string {
-	return filepath.Join(PluginRepoDir(), "config.json")
-}
-
-func PluginDir(pluginName string) string {
-	return filepath.Join(PluginRepoDir(), pluginName)
+func PluginsInstallationConfigFile() string {
+	return filepath.Join(PluginsInstallationDir(), "config.json")
 }
 
 func PluginBinaryLocation(pluginName string) string {
-	executable := filepath.Join(PluginDir(pluginName), pluginName)
+	binary := filepath.Join(PluginsInstallationDir(), pluginName, pluginName)
 	if runtime.GOOS == "windows" {
-		executable = executable + ".exe"
+		binary = binary + ".exe"
 	}
-	return executable
+	return binary
+}
+
+func PluginDataDir(pluginName string) string {
+	return filepath.Join(ConfigDir(), "plugins", pluginName)
+}
+
+func PluginConfigFile(pluginName string) string {
+	return filepath.Join(PluginDataDir(pluginName), "config.json")
 }
 
 func CFHome() string {

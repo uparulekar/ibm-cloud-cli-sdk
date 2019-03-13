@@ -196,8 +196,10 @@ type PluginContext interface {
 	// IsSSLDisabled returns whether skipping SSL validation or not
 	IsSSLDisabled() bool
 
-	// PluginDirectory returns the installation directory of the plugin
-	PluginDirectory() string
+	// PluginDataDirectory returns the data directory of the plugin.
+	// The data directory contains the plugin's config file, but not necessary
+	// the plugin's binary.
+	PluginDataDirectory() string
 
 	// HTTPTimeout returns a timeout for HTTP Client
 	HTTPTimeout() int
