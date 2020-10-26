@@ -100,7 +100,12 @@ func (c *pluginContext) PluginConfig() PluginConfig {
 func (c *pluginContext) RefreshIAMToken() (string, error) {
 	iamEndpoint := os.Getenv("IAM_ENDPOINT")
 	if iamEndpoint == "" {
-		iamEndpoint = c.IAMEndpoint()
+		endpoints := c.IAMEndpoints()
+		if c.IsPrivateEndpointEnabled() {
+			iamEndpoint = endpoints.PrivateEndpoint
+		} else {
+			iamEndpoint = endpoints.PublicEndpoint
+		}
 	}
 	if iamEndpoint == "" {
 		return "", fmt.Errorf("IAM endpoint is not set")

@@ -13,8 +13,9 @@ import (
 type Repository interface {
 	APIEndpoint() string
 	HasAPIEndpoint() bool
-	ConsoleEndpoint() string
-	IAMEndpoint() string
+	IsPrivateEndpointEnabled() bool
+	ConsoleEndpoints() models.Endpoints
+	IAMEndpoints() models.Endpoints
 	CloudName() string
 	CloudType() string
 	CurrentRegion() models.Region
@@ -57,8 +58,9 @@ type Repository interface {
 
 	UnsetAPI()
 	SetAPIEndpoint(string)
-	SetConsoleEndpoint(string)
-	SetIAMEndpoint(string)
+	SetPrivateEndpointEnabled(bool)
+	SetConsoleEndpoints(models.Endpoints)
+	SetIAMEndpoints(models.Endpoints)
 	SetCloudType(string)
 	SetCloudName(string)
 	SetRegion(models.Region)

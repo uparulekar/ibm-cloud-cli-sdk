@@ -24,12 +24,15 @@ func (r raw) Unmarshal(bytes []byte) error {
 
 type BXConfigData struct {
 	APIEndpoint                 string
+	IsPrivate                   bool
 	ConsoleEndpoint             string
+	ConsolePrivateEndpoint      string
 	CloudType                   string
 	CloudName                   string
 	Region                      string
 	RegionID                    string
 	IAMEndpoint                 string
+	IAMPrivateEndpoint          string
 	IAMToken                    string
 	IAMRefreshToken             string
 	Account                     models.Account
@@ -165,9 +168,19 @@ func (c *bxConfig) IsSSLDisabled() (disabled bool) {
 	return
 }
 
-func (c *bxConfig) ConsoleEndpoint() (endpoint string) {
+func (c *bxConfig) IsPrivateEndpointEnabled() (isPrivate bool) {
 	c.read(func() {
-		endpoint = c.data.ConsoleEndpoint
+		isPrivate = c.data.IsPrivate
+	})
+	return
+}
+
+func (c *bxConfig) ConsoleEndpoints() (endpoints models.Endpoints) {
+	c.read(func() {
+		endpoints = models.Endpoints{
+			PublicEndpoint:  c.data.ConsoleEndpoint,
+			PrivateEndpoint: c.data.ConsolePrivateEndpoint,
+		}
 	})
 	return
 }
@@ -201,9 +214,12 @@ func (c *bxConfig) CloudType() (ctype string) {
 	return
 }
 
-func (c *bxConfig) IAMEndpoint() (endpoint string) {
+func (c *bxConfig) IAMEndpoints() (endpoints models.Endpoints) {
 	c.read(func() {
-		endpoint = c.data.IAMEndpoint
+		endpoints = models.Endpoints{
+			PublicEndpoint:  c.data.IAMEndpoint,
+			PrivateEndpoint: c.data.IAMPrivateEndpoint,
+		}
 	})
 	return
 }
@@ -419,9 +435,16 @@ func (c *bxConfig) SetAPIEndpoint(endpoint string) {
 	})
 }
 
-func (c *bxConfig) SetConsoleEndpoint(endpoint string) {
+func (c *bxConfig) SetPrivateEndpointEnabled(isPrivate bool) {
 	c.write(func() {
-		c.data.ConsoleEndpoint = endpoint
+		c.data.IsPrivate = isPrivate
+	})
+}
+
+func (c *bxConfig) SetConsoleEndpoints(endpoints models.Endpoints) {
+	c.write(func() {
+		c.data.ConsoleEndpoint = endpoints.PublicEndpoint
+		c.data.ConsolePrivateEndpoint = endpoints.PrivateEndpoint
 	})
 }
 
@@ -432,9 +455,10 @@ func (c *bxConfig) SetRegion(region models.Region) {
 	})
 }
 
-func (c *bxConfig) SetIAMEndpoint(endpoint string) {
+func (c *bxConfig) SetIAMEndpoints(endpoints models.Endpoints) {
 	c.write(func() {
-		c.data.IAMEndpoint = endpoint
+		c.data.IAMEndpoint = endpoints.PublicEndpoint
+		c.data.IAMPrivateEndpoint = endpoints.PrivateEndpoint
 	})
 }
 
@@ -600,6 +624,7 @@ func (c *bxConfig) ClearSession() {
 func (c *bxConfig) UnsetAPI() {
 	c.write(func() {
 		c.data.APIEndpoint = ""
+		c.data.IsPrivate = false
 		c.data.Region = ""
 		c.data.RegionID = ""
 		c.data.ConsoleEndpoint = ""

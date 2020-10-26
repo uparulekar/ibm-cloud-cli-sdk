@@ -132,11 +132,14 @@ type PluginContext interface {
 	// Call HasTargetedCF() to return whether a CF environment has been targeted.
 	HasAPIEndpoint() bool
 
-	// ConsoleEndpoint returns the Bluemix Console endpoint
-	ConsoleEndpoint() string
+	// IsPrivateEndpointEnabled returns whether use of the private endpoint has been chosen
+	IsPrivateEndpointEnabled() bool
 
-	// IAMTEndpoint return the endpoint of IAM token service
-	IAMEndpoint() string
+	// ConsoleEndpoint returns the endpoints of Bluemix Console
+	ConsoleEndpoints() models.Endpoints
+
+	// IAMTEndpoint return the endpoints of IAM token service
+	IAMEndpoints() models.Endpoints
 
 	// CloudName returns the name of the target cloud
 	CloudName() string
